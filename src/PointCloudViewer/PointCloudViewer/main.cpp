@@ -192,6 +192,7 @@ int main(int argc, char const** argv)
 
     if(kinect_device.connect(kinect_device.get_default_device_serial(), depth_device_kinect_v2::CON_MODE::CON_MODE_CPU)){
         std::cout << "kinect connected" << std::endl;
+        kinect_device.start_capture();
     }else{
         std::cout << "no kinect with serial found" << std::endl;
     }
@@ -212,7 +213,7 @@ int main(int argc, char const** argv)
         updateTime = clockmain.getElapsedTime();
         //handle input events
         
-        
+        kinect_device.update();
         
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

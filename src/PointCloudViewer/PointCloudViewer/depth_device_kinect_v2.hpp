@@ -21,6 +21,8 @@
 #include <libfreenect2/packet_pipeline.h>
 #include <libfreenect2/logger.h>
 
+//pthread for processing
+#include <pthread.h>
 class depth_device_kinect_v2{
 
 
@@ -48,21 +50,31 @@ public:
     //create own thread
     
     bool connect(std::string _serial, CON_MODE _mode = CON_MODE::CON_MODE_CPU);
+    bool disconnect();
+    
+    
+    bool start_capture();
+    bool stop_capture();
     std::string get_default_device_serial();
      RES_POINT get_resolution();
     
     //scan
-    void update();
-private:
+    void update(); //todo remove
     
-    bool create_pipeline();
+   private:
     
+    static void* processing_frames(void* _this);
+
+    bool is_thread_running = false;
+
     std::string device_serial = "";
     //libfreenect vars
     libfreenect2::Freenect2 freenect2;
     libfreenect2::Freenect2Device *dev = 0;
     libfreenect2::PacketPipeline *pipeline = 0;
     int deviceId = -1;
+    
+     pthread_t processing_thread;
 };
 
 

@@ -19,8 +19,13 @@
  */
 
 depth_device_kinect_v2::depth_device_kinect_v2(){
+    is_thread_running = false;
+    device_serial = "";
+
 }
 depth_device_kinect_v2::~depth_device_kinect_v2(){
+    stop_capture();
+    disconnect();
 }
 
 
@@ -30,12 +35,12 @@ depth_device_kinect_v2::~depth_device_kinect_v2(){
 
 bool depth_device_kinect_v2::connect(std::string _serial, CON_MODE _mode){
 
-    if(pipeline){
-        std::cout << "pipeline open please close the device" << std::endl;
+    if(dev != 0)
+    {
+        std::cout << "please close device first" << std::endl;
         return false;
     }
-    
-    
+
     if(_mode == CON_MODE::CON_MODE_AUTO){
 #ifdef __CUDACC__
     if(!pipeline){
@@ -58,8 +63,6 @@ bool depth_device_kinect_v2::connect(std::string _serial, CON_MODE _mode){
         
     }else{
         
-        
-        
 #ifdef __CUDACC__
         if(!pipeline && _mode == CON_MODE::CON_MODE_CUDA){
             pipeline = new libfreenect2::CudaPacketPipeline(deviceId);
@@ -78,12 +81,34 @@ bool depth_device_kinect_v2::connect(std::string _serial, CON_MODE _mode){
             pipeline = new libfreenect2::CpuPacketPipeline();
             std::cout << "depth_devive_kinect_v2 - using CPU" << std::endl;
         }
-        
-        
     }
     
+    //NOW OPEN DEVICE
+    if(pipeline)
+    {
+        dev = freenect2.openDevice(_serial, pipeline);
+    }
+    else
+    {
+        dev = freenect2.openDevice(_serial);
+    }
     
-    return false;
+    if(dev == 0)
+    {
+        std::cout << "failure opening device!" << std::endl;
+        return false;
+    }
+    
+    device_serial = _serial;
+    
+    
+    
+    //TODO createenum option for stream
+
+    
+    
+   
+    return true;
 }
 
 
@@ -91,7 +116,33 @@ std::string depth_device_kinect_v2::get_default_device_serial(){
     return freenect2.getDefaultDeviceSerialNumber();
 }
 
+bool depth_device_kinect_v2::start_capture(){
+    if(dev != 0){
+     dev->start();
+    }
+    is_thread_running = true; //needed before start
+    //create thread
+    if (pthread_create(&processing_thread, NULL, processing_frames, this))
+    {
+        std::cout << "ERROR - starting processing thread" << std::endl;
+        is_thread_running = false;
+        return;
+    }
+    return  is_thread_running;
+}
 
+
+
+bool depth_device_kinect_v2::stop_capture(){
+    is_thread_running = false;
+    if(pthread_join(processing_thread, NULL)) {
+               fprintf(stderr, "Error joining thread\n");
+        return 2;
+    }
+    if(dev != 0){
+        dev->stop();
+    }
+}
 
 depth_device_kinect_v2::RES_POINT depth_device_kinect_v2::get_resolution(){
     RES_POINT p;
@@ -102,8 +153,59 @@ depth_device_kinect_v2::RES_POINT depth_device_kinect_v2::get_resolution(){
 
 //scan
 void depth_device_kinect_v2::update(){
+    
+
+}
+
+
+
+bool depth_device_kinect_v2::disconnect(){
+    if(dev != 0)
+    {
+        dev->stop();
+    dev->close();
+    }
+    return true; //TODO return release frames
 }
 
 
 
 
+void* depth_device_kinect_v2::processing_frames(void* _this){
+    depth_device_kinect_v2* caller = static_cast<depth_device_kinect_v2*>(_this);
+    
+    
+
+    std::cout << "thread start" <<std::endl;
+    if(caller == nullptr){
+        std::cout << "static_cast error" << std::endl;
+        return;
+    }
+    if(caller->dev == nullptr){
+        return;
+    }
+
+    libfreenect2::SyncMultiFrameListener listener(libfreenect2::Frame::Color |libfreenect2::Frame::Depth );
+    libfreenect2::FrameMap frames;
+   
+    caller->dev->setColorFrameListener(&listener);
+    caller->dev->setIrAndDepthFrameListener(&listener);
+    
+
+    while (true) {
+        
+        std::cout << "b";
+        if (!listener.waitForNewFrame(frames, 1000))
+        {
+           std::cout << "waitForNewFrameTimeout" << std::endl;
+           return;
+       }
+        
+        
+       libfreenect2::Frame *rgb = frames[libfreenect2::Frame::Color];
+       libfreenect2::Frame *depth = frames[libfreenect2::Frame::Depth];
+        listener.release(frames);
+    }
+   
+    std::cout << "thread end" <<std::endl;
+}
