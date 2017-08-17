@@ -21,7 +21,6 @@
 #include <libfreenect2/packet_pipeline.h>
 #include <libfreenect2/logger.h>
 
-
 class depth_device_kinect_v2{
 
 
@@ -35,6 +34,7 @@ public:
     
     
     struct RES_POINT{
+        
         int x;
         int y;
     };
@@ -44,6 +44,7 @@ public:
     //create own thread
     
     bool connect(std::string _serial, CON_MODE _mode);
+    std::string get_default_device_serial();
      RES_POINT get_resolution();
     
     //scan

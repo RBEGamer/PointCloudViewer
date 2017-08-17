@@ -184,7 +184,14 @@ int main(int argc, char const** argv)
     
     
     depth_device_kinect_v2 kinect_device;
-    if(kinect_device.connect("", depth_device_kinect_v2::CON_MODE::CON_MODE_ALL)){
+    
+    
+    
+    
+  //  std::cout << "defualt serial:" <<kinect_device.get_default_device_serial() << std::endl;
+    
+    
+    if(kinect_device.connect("374406433947", depth_device_kinect_v2::CON_MODE::CON_MODE_ALL)){
         std::cout << "kinect connected" << std::endl;
     }else{
         std::cout << "no kinect with serial found" << std::endl;

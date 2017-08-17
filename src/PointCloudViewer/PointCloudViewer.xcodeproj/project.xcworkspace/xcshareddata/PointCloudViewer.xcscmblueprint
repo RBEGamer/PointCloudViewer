@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B08EEBF824A0FBE5950AF4D9A27E482A0F77B83D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2FC522C421395DD2759F62C23CD623C35E65B748" : 9223372036854775807,
+    "B08EEBF824A0FBE5950AF4D9A27E482A0F77B83D" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "50DDCD3D-3CB1-4EC3-96B2-EE096D2ECFB0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2FC522C421395DD2759F62C23CD623C35E65B748" : "libfreenect2\/",
+    "B08EEBF824A0FBE5950AF4D9A27E482A0F77B83D" : "PointCloudViewer\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PointCloudViewer",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "src\/PointCloudViewer\/PointCloudViewer.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/OpenKinect\/libfreenect2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2FC522C421395DD2759F62C23CD623C35E65B748"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/RBEGamer\/PointCloudViewer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B08EEBF824A0FBE5950AF4D9A27E482A0F77B83D"
+    }
+  ]
+}

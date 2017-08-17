@@ -1,0 +1,7 @@
+/Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/build/CMakeFiles/install/local.dir
+/Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/build/CMakeFiles/install/strip.dir
+/Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/build/CMakeFiles/install.dir
+/Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/build/CMakeFiles/PointCloudViewer.dir
+/Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/build/CMakeFiles/list_install_components.dir
+/Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/build/CMakeFiles/rebuild_cache.dir
+/Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/build/CMakeFiles/edit_cache.dir
