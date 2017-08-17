@@ -6,15 +6,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PointCloudViewer/main.cpp"
-            timestampString = "524625975.869514"
+            timestampString = "524649549.451191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "main(int argc, char const** argv)"
             landmarkType = "9">
          </BreakpointContent>

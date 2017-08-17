@@ -23,11 +23,21 @@
 #include "primitive_cube.hpp"
 
 
+#include "depth_device_kinect_v2.hpp"
+
 #define PI 3.1415926535897932384626433832795
+
+
+
+
+
+
+
+
 
 //HELPER FUNCS HERE ---------------------------------------------------------------
 #if defined(__APPLE__)
-//on my old mac i have a opengl version < 2.1 where the gluPerspective still exists
+//on my old mac i have a opengl version < 2.1 where the gluPerspective still exists -> Xcode 8.2
 #else
 void perspectiveGL( GLdouble fovY, GLdouble aspect, GLdouble zNear, GLdouble zFar )
 {
@@ -53,14 +63,32 @@ sf::Time updateTime;
 std::vector<primitive*> objs;
 std::vector<primitive_cube*> cubes;
 
-int cleanup(){
+
+
+std::vector<primitive*> allocate_cubes(std::vector<primitive*> *_obj_list, std::vector<primitive_cube*> *_cube_list, const unsigned int _count){
+std::vector<primitive*> alloc_prims;
+    for (size_t i = 0; i < _count; i++) {
+        primitive_cube* testcube = new primitive_cube();
+        objs.push_back(testcube);
+        cubes.push_back(testcube);
+        alloc_prims.push_back(testcube);
+    }
+    if(alloc_prims.size() != _count){
+        std::cout << "ERROR - allocate_cubes failed for " << _count << " objects" << std::endl;
+    }
+    return alloc_prims;
+}
+
+int cleanup(){ //TODO DELETE MISSING
     std::cout << "cleanup" << std::endl;
     for (size_t i = 0; i < objs.size(); i++) {
+        if(objs.at(i) != nullptr){
         delete objs.at(i);
+        objs.at(i) = NULL;
+        }
     }
     
     objs.clear();
-    
     return 0;
 }
 
@@ -98,7 +126,7 @@ void process_sfml_event(sf::Window& _window){
 int main(int argc, char const** argv)
 {
     
-     sf::RenderWindow window(sf::VideoMode(800, 600), "PCloud_TEST");
+     sf::RenderWindow window(sf::VideoMode(800, 600), "PointCloudViewer");
     //clearcol
     glClearDepth(1.f);
     glClearColor(0.1412f, 0.1412f, 0.1412f, 0.f);
@@ -107,11 +135,10 @@ int main(int argc, char const** argv)
     /*TODO
      create own define file for types
      create scenemanager for holding objects
-     primitives with parents
      include ini loader
      add input handler for key events
      add shader support
-     
+     add can data rec send wtih mutli can for tx2
      
      
      */
@@ -119,9 +146,9 @@ int main(int argc, char const** argv)
     
     
   
+    /*
     
-    
-    
+
     float radius = 100;
     int angle = 30;
     for (int i = 0; i < 360; i+=10)
@@ -131,31 +158,43 @@ int main(int argc, char const** argv)
             //Use the equation of the Spherical Coordinate system to display a sphere
             sf::Vector3f posVec = sf::Vector3f(radius* sin((i)* PI / 180.0) * cos((j)* PI / 180.0), radius* sin((i)* PI / 180.0) * sin((j)* PI / 180.0), radius* cos((i)* PI / 180.0));
             float cubeSize = 1.0f;
-            
             sf::Color colour = sf::Color(rand() % 205 + 50, rand() % 205 + 50, rand() % 205 + 50);
            
       
-            
-            primitive_cube* testcube = new primitive_cube();
+    
             testcube->position =posVec;
             testcube->scale = sf::Vector3f(cubeSize,cubeSize,cubeSize);
             testcube->color= sf::Vector3f(colour.r/255.0f,colour.g/255.0f,colour.b/255.0f);
-            objs.push_back(testcube);
-            cubes.push_back(testcube);
+         
             
             
         }
     }
     
+    */
     
     
     
     
     
-    //init objs
-    for (size_t i = 0; i < objs.size(); i++) {
-            objs.at(i)->init();
+    
+    
+  // std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,200);
+    
+    
+    
+    depth_device_kinect_v2 kinect_device;
+    if(kinect_device.connect("", depth_device_kinect_v2::CON_MODE::CON_MODE_ALL)){
+        std::cout << "kinect connected" << std::endl;
+    }else{
+        std::cout << "no kinect with serial found" << std::endl;
     }
+    
+    
+    //init  all existing objs //todo remove
+   // for (size_t i = 0; i < objs.size(); i++) {
+   //         objs.at(i)->init();
+   // }
     
     
     

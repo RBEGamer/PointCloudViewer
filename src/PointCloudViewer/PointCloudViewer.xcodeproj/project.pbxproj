@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F1841C91F4585B400BC11E9 /* depth_device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F1841C71F4585B400BC11E9 /* depth_device.cpp */; };
+		1F1841CC1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F1841CA1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp */; };
 		1F23E7CC1F44F91E00EEFDA2 /* primitive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23E7CA1F44F91E00EEFDA2 /* primitive.cpp */; };
 		1F23E7CF1F45056B00EEFDA2 /* primitive_cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23E7CD1F45056B00EEFDA2 /* primitive_cube.cpp */; };
 		1F9D9D941F44EAF8009DD8AC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D9D931F44EAF8009DD8AC /* main.cpp */; };
@@ -15,6 +17,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F1841C71F4585B400BC11E9 /* depth_device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = depth_device.cpp; sourceTree = "<group>"; };
+		1F1841C81F4585B400BC11E9 /* depth_device.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = depth_device.hpp; sourceTree = "<group>"; };
+		1F1841CA1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = depth_device_kinect_v2.cpp; sourceTree = "<group>"; };
+		1F1841CB1F4594AC00BC11E9 /* depth_device_kinect_v2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = depth_device_kinect_v2.hpp; sourceTree = "<group>"; };
 		1F23E7CA1F44F91E00EEFDA2 /* primitive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = primitive.cpp; sourceTree = "<group>"; };
 		1F23E7CB1F44F91E00EEFDA2 /* primitive.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = primitive.hpp; sourceTree = "<group>"; };
 		1F23E7CD1F45056B00EEFDA2 /* primitive_cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = primitive_cube.cpp; sourceTree = "<group>"; };
@@ -64,6 +70,10 @@
 				1F23E7CB1F44F91E00EEFDA2 /* primitive.hpp */,
 				1F23E7CD1F45056B00EEFDA2 /* primitive_cube.cpp */,
 				1F23E7CE1F45056B00EEFDA2 /* primitive_cube.hpp */,
+				1F1841C71F4585B400BC11E9 /* depth_device.cpp */,
+				1F1841C81F4585B400BC11E9 /* depth_device.hpp */,
+				1F1841CA1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp */,
+				1F1841CB1F4594AC00BC11E9 /* depth_device_kinect_v2.hpp */,
 			);
 			path = PointCloudViewer;
 			sourceTree = "<group>";
@@ -142,6 +152,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F9D9D941F44EAF8009DD8AC /* main.cpp in Sources */,
+				1F1841CC1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp in Sources */,
+				1F1841C91F4585B400BC11E9 /* depth_device.cpp in Sources */,
 				1F23E7CC1F44F91E00EEFDA2 /* primitive.cpp in Sources */,
 				1F23E7CF1F45056B00EEFDA2 /* primitive_cube.cpp in Sources */,
 			);

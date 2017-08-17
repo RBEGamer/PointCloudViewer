@@ -21,16 +21,17 @@
 #include <iostream>
 class primitive{
     
-    
+
+   
     
 public:
     primitive();
     virtual ~primitive();
-    
+
     virtual void draw();
     virtual void update(const float _delta);
     virtual void init();
-    
+    virtual void print_info();
     
     
     bool enabled;

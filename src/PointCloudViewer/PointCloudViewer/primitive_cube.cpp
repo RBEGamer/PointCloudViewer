@@ -8,6 +8,9 @@
 
 #include "primitive_cube.hpp"
 
+void primitive_cube::print_info(){
+    std::cout << "cube " << " pos=" << position.x << "," << position.y << "," << position.z << "" << std::endl;
+}
 
 
 primitive_cube::primitive_cube(){

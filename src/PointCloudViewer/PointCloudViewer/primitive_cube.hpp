@@ -30,10 +30,11 @@ public:
     void draw();
     void update(const float _delta);
     void init();
-    
+    void print_info();
     
     sf::Vector3f color;
     
+
 
     
 };
