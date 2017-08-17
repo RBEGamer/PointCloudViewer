@@ -29,7 +29,11 @@ public:
     ~depth_device_kinect_v2();
     
     enum CON_MODE{
-    CON_MODE_ALL
+        CON_MODE_OGL,
+        CON_MODE_OCL,
+        CON_MODE_CUDA,
+        CON_MODE_AUTO,
+        CON_MODE_CPU
     };
     
     
@@ -43,7 +47,7 @@ public:
     //hardcode kin paramters
     //create own thread
     
-    bool connect(std::string _serial, CON_MODE _mode);
+    bool connect(std::string _serial, CON_MODE _mode = CON_MODE::CON_MODE_CPU);
     std::string get_default_device_serial();
      RES_POINT get_resolution();
     
