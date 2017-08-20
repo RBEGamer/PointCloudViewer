@@ -203,7 +203,24 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
         
         
        libfreenect2::Frame *rgb = frames[libfreenect2::Frame::Color];
+        
+        
+        //depth processing
+        //ADD CUDA OPENCL HERE
+        //USING ARRAYFIRE
        libfreenect2::Frame *depth = frames[libfreenect2::Frame::Depth];
+        float *frame_data = (float *)depth->data;
+        float raw_depth_value = -1.0f;
+        for (size_t w = 0; w < depth->width; w++) {
+            for (size_t h = 0; h < depth->height; h++) {
+                raw_depth_value = frame_data[h*depth->width+w];
+                //CALC REAL 3D POINT
+            }
+        }
+        
+       
+        
+        
         listener.release(frames);
     }
    
