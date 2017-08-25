@@ -23,6 +23,26 @@
 
 //pthread for processing
 #include <pthread.h>
+#include<mutex>
+
+//NOT CHANGEABLE DEFINES BY THE V2 Hardware
+#define MIN_DEPTH_MM 0
+#define MAX_DEPTH_MM 4500
+
+#define KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X 512
+#define KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y 424
+#define KINECT_V2_CAMERA_PARAMS_RES_DEPTH_PIXELS (KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y)
+#define  KINECT_V2_CAMERA_PARAMS_CX 254.878f
+#define  KINECT_V2_CAMERA_PARAMS_CY 205.395f
+#define  KINECT_V2_CAMERA_PARAMS_FX 365.456f
+#define  KINECT_V2_CAMERA_PARAMS_FY 365.456f
+#define  KINECT_V2_CAMERA_PARAMS_K1 0.0905474f
+#define  KINECT_V2_CAMERA_PARAMS_K2 -0.26819f
+#define  KINECT_V2_CAMERA_PARAMS_K3 0.0950862f
+#define  KINECT_V2_CAMERA_PARAMS_P1 0.0f
+#define  KINECT_V2_CAMERA_PARAMS_P2 0.0f
+
+
 class depth_device_kinect_v2{
 
 
@@ -40,10 +60,13 @@ public:
     
     
     struct RES_POINT{
-        
         int x;
         int y;
     };
+    
+    
+    float* dd;
+
     
     
     //hardcode kin paramters
@@ -66,15 +89,22 @@ public:
     static void* processing_frames(void* _this);
 
     bool is_thread_running = false;
-
+    float depth_point_scaling_factor = 1.0f;
     std::string device_serial = "";
     //libfreenect vars
     libfreenect2::Freenect2 freenect2;
     libfreenect2::Freenect2Device *dev = 0;
     libfreenect2::PacketPipeline *pipeline = 0;
     int deviceId = -1;
+    pthread_t processing_thread;
     
-     pthread_t processing_thread;
+    
+public:
+     std::mutex depth_read_lock;
+
+    
+    
+    
 };
 
 

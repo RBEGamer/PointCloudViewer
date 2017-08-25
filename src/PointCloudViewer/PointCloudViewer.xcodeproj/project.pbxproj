@@ -22,7 +22,7 @@
 		1F1841C81F4585B400BC11E9 /* depth_device.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = depth_device.hpp; sourceTree = "<group>"; };
 		1F1841CA1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = depth_device_kinect_v2.cpp; sourceTree = "<group>"; };
 		1F1841CB1F4594AC00BC11E9 /* depth_device_kinect_v2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = depth_device_kinect_v2.hpp; sourceTree = "<group>"; };
-		1F1841CD1F45A36000BC11E9 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		1F1841CD1F45A36000BC11E9 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../config.h; sourceTree = "<group>"; };
 		1F1841CE1F45A8C100BC11E9 /* libfreenect2.0.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreenect2.0.2.0.dylib; path = ../../../libfreenect2/build/lib/libfreenect2.0.2.0.dylib; sourceTree = "<group>"; };
 		1F23E7CA1F44F91E00EEFDA2 /* primitive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = primitive.cpp; sourceTree = "<group>"; };
 		1F23E7CB1F44F91E00EEFDA2 /* primitive.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = primitive.hpp; sourceTree = "<group>"; };
@@ -51,7 +51,6 @@
 		1F9D9D881F44EAF8009DD8AC = {
 			isa = PBXGroup;
 			children = (
-				1F1841CD1F45A36000BC11E9 /* config.h */,
 				1F9D9D921F44EAF8009DD8AC /* PointCloudViewer */,
 				1F9D9D911F44EAF8009DD8AC /* Products */,
 				1F9D9D9F1F44ED95009DD8AC /* Frameworks */,
@@ -69,6 +68,7 @@
 		1F9D9D921F44EAF8009DD8AC /* PointCloudViewer */ = {
 			isa = PBXGroup;
 			children = (
+				1F1841CD1F45A36000BC11E9 /* config.h */,
 				1F9D9D931F44EAF8009DD8AC /* main.cpp */,
 				1F9D9D951F44EAF8009DD8AC /* Resources */,
 				1F23E7CA1F44F91E00EEFDA2 /* primitive.cpp */,

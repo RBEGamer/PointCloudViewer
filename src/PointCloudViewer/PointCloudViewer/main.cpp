@@ -33,8 +33,6 @@
 
 
 
-
-
 //HELPER FUNCS HERE ---------------------------------------------------------------
 #if defined(__APPLE__)
 //on my old mac i have a opengl version < 2.1 where the gluPerspective still exists -> Xcode 8.2
@@ -64,6 +62,10 @@ std::vector<primitive*> objs;
 std::vector<primitive_cube*> cubes;
 
 
+depth_device_kinect_v2 kinect_device;
+
+
+
 
 std::vector<primitive*> allocate_cubes(std::vector<primitive*> *_obj_list, std::vector<primitive_cube*> *_cube_list, const unsigned int _count){
 std::vector<primitive*> alloc_prims;
@@ -87,7 +89,8 @@ int cleanup(){ //TODO DELETE MISSING
         objs.at(i) = NULL;
         }
     }
-    
+    kinect_device.stop_capture();
+    kinect_device.disconnect();
     objs.clear();
     return 0;
 }
@@ -142,9 +145,7 @@ int main(int argc, char const** argv)
      
      
      */
-    
-    
-    
+ 
   
     /*
     
@@ -179,11 +180,11 @@ int main(int argc, char const** argv)
     
     
     
-  // std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,200);
+   std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,512*424);
     
     
     
-    depth_device_kinect_v2 kinect_device;
+    
     
     
     
@@ -227,6 +228,15 @@ int main(int argc, char const** argv)
         gluPerspective(90.f, 1.f, 1.f, 2000.0f);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        
+        
+        kinect_device.depth_read_lock.lock();
+        for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
+            for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
+                objs.at(h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->position = sf::Vector3f(&kinect_device.dd[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w][0],kinect_device.dd[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w][1],kinect_device.dd[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w][2]);
+            }
+        }
+            kinect_device.depth_read_lock.unlock();
         
         
         //draw objs

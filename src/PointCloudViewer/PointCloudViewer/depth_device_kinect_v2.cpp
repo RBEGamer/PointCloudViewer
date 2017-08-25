@@ -21,7 +21,6 @@
 depth_device_kinect_v2::depth_device_kinect_v2(){
     is_thread_running = false;
     device_serial = "";
-
 }
 depth_device_kinect_v2::~depth_device_kinect_v2(){
     stop_capture();
@@ -103,7 +102,8 @@ bool depth_device_kinect_v2::connect(std::string _serial, CON_MODE _mode){
     
     
     
-    //TODO createenum option for stream
+ //TODO MALLOC POINTS
+    //CREATE RING BUFFER with x times the size for scrolling effect
 
     
     
@@ -192,35 +192,83 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
     caller->dev->setIrAndDepthFrameListener(&listener);
     
 
-    while (true) {
+    
+    //DEPTH POINT VARS FOR CPU CALC
+    float raw_depth_value = 0.0f;
+    float px = 0.0f,py = 0.0f, pz = 0.0f;
+    float processed_depth_array_h[KINECT_V2_CAMERA_PARAMS_RES_DEPTH_PIXELS][3] = {0.0f};
+    bool  valid_depth_point [KINECT_V2_CAMERA_PARAMS_RES_DEPTH_PIXELS] = {false};
+    
+    
+    caller->dd = *processed_depth_array_h;
+   
+    
+    
+    float fact = 1.0f;
+    while (caller->is_thread_running) {
         
-        std::cout << "b";
+        fact = caller->depth_point_scaling_factor;
+        
         if (!listener.waitForNewFrame(frames, 1000))
         {
            std::cout << "waitForNewFrameTimeout" << std::endl;
-           return;
+           continue;
        }
         
         
        libfreenect2::Frame *rgb = frames[libfreenect2::Frame::Color];
+        //TODO ADD SIGN DETECTION
         
         
-        //depth processing
-        //ADD CUDA OPENCL HERE
-        //USING ARRAYFIRE
+        
+        
+        //TODO ADD CUDA
+       //GET RAW DATA OF THE DEPTH FRAME AND CLAC 3d point 1.0f = 1.0 meter
        libfreenect2::Frame *depth = frames[libfreenect2::Frame::Depth];
         float *frame_data = (float *)depth->data;
-        float raw_depth_value = -1.0f;
-        for (size_t w = 0; w < depth->width; w++) {
-            for (size_t h = 0; h < depth->height; h++) {
-                raw_depth_value = frame_data[h*depth->width+w];
-                //CALC REAL 3D POINT
-            }
-        }
-        
-       
+
         
         
+       caller->depth_read_lock.lock();
+        
+        for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
+            for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
+                raw_depth_value = frame_data[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w];
+                //TODO CEHCK RANGE 0-4500
+                //skip ranges
+                if(raw_depth_value > MIN_DEPTH_MM && raw_depth_value < MAX_DEPTH_MM){
+                /*
+                 point.z = (depthValue);// / (1.0f); // Convert from mm to meters
+                 point.x = (x - CameraParams.cx) * point.z / CameraParams.fx;
+                 point.y = (y - CameraParams.cy) * point.z / CameraParams.fy;
+                 */
+                    pz = raw_depth_value/1000.0f;//// Convert from mm to meters
+                    px = (w - KINECT_V2_CAMERA_PARAMS_CX) * pz / KINECT_V2_CAMERA_PARAMS_FX;
+                    py = (h - KINECT_V2_CAMERA_PARAMS_CY) * pz / KINECT_V2_CAMERA_PARAMS_FY;
+                    //assign claced point to array
+                    processed_depth_array_h[h*depth->width+w][0] = px*fact;
+                    processed_depth_array_h[h*depth->width+w][1] = py*fact;
+                    processed_depth_array_h[h*depth->width+w][2] = pz*fact;
+                    valid_depth_point[h*depth->width+w] = true;
+                }else{
+                    valid_depth_point[h*depth->width+w] = false;
+                }
+
+                } //END h
+            } //END W
+        caller->depth_read_lock.unlock();
+        
+    //
+   
+      //  caller->depth_read_lock.unlock();
+        
+        
+        
+       //TODO CLEANUP CUDA
+        #ifdef __CUDACC__
+        #endif
+        
+        //RELEASE FRAME
         listener.release(frames);
     }
    
