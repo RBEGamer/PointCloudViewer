@@ -21,10 +21,19 @@
 depth_device_kinect_v2::depth_device_kinect_v2(){
     is_thread_running = false;
     device_serial = "";
+    
+    depth_points = new sf::Vector3f[KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y]();
+#ifdef __CUDACC__
+    //TODO MALLOC ON DEV
+#endif
+    
+    
+    
 }
 depth_device_kinect_v2::~depth_device_kinect_v2(){
     stop_capture();
     disconnect();
+    delete [] depth_points;
 }
 
 
@@ -144,10 +153,10 @@ bool depth_device_kinect_v2::stop_capture(){
     }
 }
 
-depth_device_kinect_v2::RES_POINT depth_device_kinect_v2::get_resolution(){
-    RES_POINT p;
-    p.x = 498;
-    p.y = 512;
+sf::Vector2i depth_device_kinect_v2::get_resolution(){
+    sf::Vector2i p;
+    p.x = KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X;
+    p.y = KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y;
     return p;
 }
 
@@ -196,11 +205,9 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
     //DEPTH POINT VARS FOR CPU CALC
     float raw_depth_value = 0.0f;
     float px = 0.0f,py = 0.0f, pz = 0.0f;
-    float processed_depth_array_h[KINECT_V2_CAMERA_PARAMS_RES_DEPTH_PIXELS][3] = {0.0f};
-    bool  valid_depth_point [KINECT_V2_CAMERA_PARAMS_RES_DEPTH_PIXELS] = {false};
     
     
-    caller->dd = *processed_depth_array_h;
+   // caller->dd = &processed_depth_array_h;
    
     
     
@@ -229,7 +236,7 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
 
         
         
-       caller->depth_read_lock.lock();
+        if(caller->depth_read_lock.try_lock()){
         
         for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
             for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
@@ -246,21 +253,20 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
                     px = (w - KINECT_V2_CAMERA_PARAMS_CX) * pz / KINECT_V2_CAMERA_PARAMS_FX;
                     py = (h - KINECT_V2_CAMERA_PARAMS_CY) * pz / KINECT_V2_CAMERA_PARAMS_FY;
                     //assign claced point to array
-                    processed_depth_array_h[h*depth->width+w][0] = px*fact;
-                    processed_depth_array_h[h*depth->width+w][1] = py*fact;
-                    processed_depth_array_h[h*depth->width+w][2] = pz*fact;
-                    valid_depth_point[h*depth->width+w] = true;
+                    *(caller->depth_points+h*depth->width+w+0) = sf::Vector3f(px*fact,py*fact,pz*fact);
+                //    valid_depth_point[h*depth->width+w] = true;
                 }else{
-                    valid_depth_point[h*depth->width+w] = false;
+                  //  valid_depth_point[h*depth->width+w] = false;
                 }
 
                 } //END h
             } //END W
+            
         caller->depth_read_lock.unlock();
-        
+        }//edn trylock
     //
    
-      //  caller->depth_read_lock.unlock();
+      
         
         
         

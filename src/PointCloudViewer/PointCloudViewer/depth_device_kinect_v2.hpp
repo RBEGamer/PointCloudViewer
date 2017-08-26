@@ -25,6 +25,16 @@
 #include <pthread.h>
 #include<mutex>
 
+
+//for sf::vector
+#include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
+
+
+//for the primitives
+
+
+
 //NOT CHANGEABLE DEFINES BY THE V2 Hardware
 #define MIN_DEPTH_MM 0
 #define MAX_DEPTH_MM 4500
@@ -59,14 +69,9 @@ public:
     };
     
     
-    struct RES_POINT{
-        int x;
-        int y;
-    };
-    
-    
-    float* dd;
 
+ 
+    sf::Vector3f* depth_points;
     
     
     //hardcode kin paramters
@@ -79,7 +84,7 @@ public:
     bool start_capture();
     bool stop_capture();
     std::string get_default_device_serial();
-     RES_POINT get_resolution();
+    sf::Vector2i get_resolution();
     
     //scan
     void update(); //todo remove

@@ -233,7 +233,7 @@ int main(int argc, char const** argv)
         kinect_device.depth_read_lock.lock();
         for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
             for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
-                objs.at(h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->position = sf::Vector3f(&kinect_device.dd[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w][0],kinect_device.dd[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w][1],kinect_device.dd[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w][2]);
+                objs.at(h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->position = kinect_device.
             }
         }
             kinect_device.depth_read_lock.unlock();
