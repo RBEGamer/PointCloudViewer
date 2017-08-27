@@ -147,8 +147,9 @@ int main(int argc, char const** argv)
      */
  
   
-    /*
     
+    std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,512*424);
+
 
     float radius = 100;
     int angle = 30;
@@ -158,21 +159,22 @@ int main(int argc, char const** argv)
         {
             //Use the equation of the Spherical Coordinate system to display a sphere
             sf::Vector3f posVec = sf::Vector3f(radius* sin((i)* PI / 180.0) * cos((j)* PI / 180.0), radius* sin((i)* PI / 180.0) * sin((j)* PI / 180.0), radius* cos((i)* PI / 180.0));
-            float cubeSize = 1.0f;
+            float cubeSize = 5.0f;
             sf::Color colour = sf::Color(rand() % 205 + 50, rand() % 205 + 50, rand() % 205 + 50);
            
       
     
-            testcube->position =posVec;
-            testcube->scale = sf::Vector3f(cubeSize,cubeSize,cubeSize);
-            testcube->color= sf::Vector3f(colour.r/255.0f,colour.g/255.0f,colour.b/255.0f);
+            cubes.at(i+j)->position =posVec;
+            
+            cubes.at(i+j)->scale = sf::Vector3f(cubeSize,cubeSize,cubeSize);
+            
+            cubes.at(i+j)->color= sf::Vector3f(colour.r/255.0f,colour.g/255.0f,colour.b/255.0f);
          
             
             
         }
     }
     
-    */
     
     
     
@@ -180,7 +182,7 @@ int main(int argc, char const** argv)
     
     
     
-   std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,512*424);
+    
     
     
     
@@ -199,11 +201,7 @@ int main(int argc, char const** argv)
     }
 
     
-    //init  all existing objs //todo remove
-   // for (size_t i = 0; i < objs.size(); i++) {
-   //         objs.at(i)->init();
-   // }
-    
+  
     
     
     
@@ -230,17 +228,14 @@ int main(int argc, char const** argv)
         glLoadIdentity();
         
         
-        kinect_device.depth_read_lock.lock();
-        for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
-            for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
-                objs.at(h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->position = kinect_device.
-            }
-        }
-            kinect_device.depth_read_lock.unlock();
-        
+      
+//      kinect_device.refresh_existing_primitives_position(test);
+
+       
         
         //draw objs
         for (size_t i = 0; i < objs.size(); i++) {
+         //   objs.at(i)->print_info();
             objs.at(i)->update(delta.asSeconds());
             objs.at(i)->draw();
         }

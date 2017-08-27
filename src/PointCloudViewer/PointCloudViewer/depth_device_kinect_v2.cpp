@@ -21,11 +21,10 @@
 depth_device_kinect_v2::depth_device_kinect_v2(){
     is_thread_running = false;
     device_serial = "";
+
     
-    depth_points = new sf::Vector3f[KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y]();
-#ifdef __CUDACC__
-    //TODO MALLOC ON DEV
-#endif
+    depth_points = new DEPTH_POINT[KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y*3]();
+
     
     
     
@@ -130,8 +129,9 @@ bool depth_device_kinect_v2::start_capture(){
      dev->start();
     }
     is_thread_running = true; //needed before start
+    got_new_depth_data = false;
     //create thread
-    if (pthread_create(&processing_thread, NULL, processing_frames, this))
+    if (pthread_create(&processing_thread, NULL, &processing_frames,(void *)this))
     {
         std::cout << "ERROR - starting processing thread" << std::endl;
         is_thread_running = false;
@@ -144,6 +144,7 @@ bool depth_device_kinect_v2::start_capture(){
 
 bool depth_device_kinect_v2::stop_capture(){
     is_thread_running = false;
+    got_new_depth_data = false;
     if(pthread_join(processing_thread, NULL)) {
                fprintf(stderr, "Error joining thread\n");
         return 2;
@@ -154,17 +155,18 @@ bool depth_device_kinect_v2::stop_capture(){
 }
 
 sf::Vector2i depth_device_kinect_v2::get_resolution(){
-    sf::Vector2i p;
-    p.x = KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X;
-    p.y = KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y;
-    return p;
+    return  sf::Vector2i(KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X,KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y);
 }
+
+
 
 //scan
 void depth_device_kinect_v2::update(){
     
 
 }
+
+
 
 
 
@@ -177,11 +179,76 @@ bool depth_device_kinect_v2::disconnect(){
     return true; //TODO return release frames
 }
 
+sf::Vector3f depth_device_kinect_v2::get_depth_point(const  int _x, const int _y){
+    if(depth_points == nullptr){
+        std::cout << __FUNCTION__ << " - ERROR - ptr == null" << std::endl;
+        throw __FUNCTION__;
+        return sf::Vector3f(0.0f,0.0f,0.0f);
+    }
+    if(_x >= KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X || _y >= KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y){
+        std::cout << __FUNCTION__ << " - ERROR - coordinate out of range" << std::endl;
+        throw __FUNCTION__;
+        return sf::Vector3f(0.0f,0.0f,0.0f);
+    }
+    depth_read_lock.lock();
+    sf::Vector3f tmp = sf::Vector3f((depth_points+_y*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+_x+0)->x*depth_scale,
+                                    (depth_points+_y*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+_x+0)->y*depth_scale,
+                                    (depth_points+_y*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+_x+0)->z*depth_scale);
+    depth_read_lock.unlock();
+    return tmp;
+}
+
+
+//SIMPLY GOTO THOUGH EACH POINT AN UPDATE POSTION
+bool depth_device_kinect_v2::refresh_existing_primitives_position(std::vector<primitive*> _primitives){
+    if(dev == 0){
+        std::cout << __FUNCTION__ << " - ERROR - please open device first" << std::endl;
+
+        return false;
+    }
+    if(depth_points == nullptr){
+        std::cout << __FUNCTION__ << " - ERROR - ptr == null" << std::endl;
+        throw __FUNCTION__;
+        return false;
+    }
+   
+    
+    depth_read_lock.lock();
+    
+   
+    if(!got_new_depth_data){
+        return 0;
+    }
+    
+    size_t prim_index_counter = 0;
+    for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
+        for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
+            if(_primitives.at(prim_index_counter) == nullptr){
+                prim_index_counter++;
+                continue;
+            }
+            //Simply copy over
+            if(prim_index_counter >= _primitives.size()){
+                break;
+            }
+            _primitives.at(prim_index_counter)->position =  sf::Vector3f((depth_points+h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->x*depth_scale,
+                                                                         (depth_points+h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->y*depth_scale,
+                                                                         (depth_points+h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->z*depth_scale);
+            prim_index_counter++;
+        }
+    }
+    got_new_depth_data = false;
+    depth_read_lock.unlock();
+    return prim_index_counter;
+}
 
 
 
+
+
+//THIS IS THE THREAD FUNCTION FOR GET A KINECT FRAME
 void* depth_device_kinect_v2::processing_frames(void* _this){
-    depth_device_kinect_v2* caller = static_cast<depth_device_kinect_v2*>(_this);
+    depth_device_kinect_v2* caller = reinterpret_cast<depth_device_kinect_v2*>(_this);
     
     
 
@@ -207,15 +274,15 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
     float px = 0.0f,py = 0.0f, pz = 0.0f;
     
     
-   // caller->dd = &processed_depth_array_h;
-   
+ 
     
-    
-    float fact = 1.0f;
-    while (caller->is_thread_running) {
+        while (caller->is_thread_running) {
         
-        fact = caller->depth_point_scaling_factor;
+       
         
+            caller->got_new_depth_data = false;
+
+            
         if (!listener.waitForNewFrame(frames, 1000))
         {
            std::cout << "waitForNewFrameTimeout" << std::endl;
@@ -234,49 +301,47 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
        libfreenect2::Frame *depth = frames[libfreenect2::Frame::Depth];
         float *frame_data = (float *)depth->data;
 
-        
+    
         
         if(caller->depth_read_lock.try_lock()){
-        
+      
+            
+//#ifdef __CUDACC__
+//             cuda_calc_depth_3d_point<<<1, 1>>>(frame_data, caller->depth_points);
+//#else
+            
         for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
             for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
                 raw_depth_value = frame_data[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w];
-                //TODO CEHCK RANGE 0-4500
-                //skip ranges
-                if(raw_depth_value > MIN_DEPTH_MM && raw_depth_value < MAX_DEPTH_MM){
-                /*
-                 point.z = (depthValue);// / (1.0f); // Convert from mm to meters
-                 point.x = (x - CameraParams.cx) * point.z / CameraParams.fx;
-                 point.y = (y - CameraParams.cy) * point.z / CameraParams.fy;
-                 */
-                    pz = raw_depth_value/1000.0f;//// Convert from mm to meters
-                    px = (w - KINECT_V2_CAMERA_PARAMS_CX) * pz / KINECT_V2_CAMERA_PARAMS_FX;
-                    py = (h - KINECT_V2_CAMERA_PARAMS_CY) * pz / KINECT_V2_CAMERA_PARAMS_FY;
-                    //assign claced point to array
-                    *(caller->depth_points+h*depth->width+w+0) = sf::Vector3f(px*fact,py*fact,pz*fact);
-                //    valid_depth_point[h*depth->width+w] = true;
-                }else{
-                  //  valid_depth_point[h*depth->width+w] = false;
-                }
-
+                pz = raw_depth_value/DEPTH_UNIT_FACTOR;//// Convert from mm to meters
+                px = (w - KINECT_V2_CAMERA_PARAMS_CX) * pz / KINECT_V2_CAMERA_PARAMS_FX;
+                py = (h - KINECT_V2_CAMERA_PARAMS_CY) * pz / KINECT_V2_CAMERA_PARAMS_FY;
+                //ASSIGN
+                (caller->depth_points+h*depth->width+w)->x= px;// = sf::Vector3f(px,py,pz);
+                (caller->depth_points+h*depth->width+w)->y= py;
+                (caller->depth_points+h*depth->width+w)->z= pz;
+                (caller->depth_points+h*depth->width+w)->length = sqrtf((powf(px, 2.0f)+powf(py, 2.0f)+powf(pz, 2.0f)));
                 } //END h
             } //END W
-            
-        caller->depth_read_lock.unlock();
-        }//edn trylock
-    //
+//#endif
+            caller->got_new_depth_data = true;
+            caller->depth_read_lock.unlock();
+        }//end trylock
+    
    
-      
-        
-        
-        
-       //TODO CLEANUP CUDA
-        #ifdef __CUDACC__
-        #endif
-        
         //RELEASE FRAME
         listener.release(frames);
     }
-   
     std::cout << "thread end" <<std::endl;
 }
+
+
+
+#ifdef __CUDACC__
+__global__ void cuda_calc_depth_3d_point(float* _raw_depth, DEPTH_POINT* _point_array)
+{
+   int i = blockIdx.x * blockDim.x + threadIdx.x;
+    
+    
+}
+#endif

@@ -32,12 +32,15 @@
 
 
 //for the primitives
-
+#include "primitive.hpp"
 
 
 //NOT CHANGEABLE DEFINES BY THE V2 Hardware
 #define MIN_DEPTH_MM 0
 #define MAX_DEPTH_MM 4500
+
+
+#define DEPTH_UNIT_FACTOR 1000.0f  //1meter = 1.0 unit
 
 #define KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X 512
 #define KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y 424
@@ -70,14 +73,18 @@ public:
     
     
 
- 
-    sf::Vector3f* depth_points;
-    
-    
+    struct DEPTH_POINT{
+        float x,y,z;
+        float length;
+    };
+   
+   
     //hardcode kin paramters
     //create own thread
-    
-    bool connect(std::string _serial, CON_MODE _mode = CON_MODE::CON_MODE_CPU);
+#ifdef __CUDACC__
+    //TODO MALLOC ON DEV
+#endif
+    bool connect(const std::string _serial, CON_MODE _mode = CON_MODE::CON_MODE_CPU);
     bool disconnect();
     
     
@@ -86,6 +93,9 @@ public:
     std::string get_default_device_serial();
     sf::Vector2i get_resolution();
     
+    
+    sf::Vector3f get_depth_point(const  int _x, const int _y);
+    bool refresh_existing_primitives_position(std::vector<primitive*> _primitives);
     //scan
     void update(); //todo remove
     
@@ -104,11 +114,11 @@ public:
     pthread_t processing_thread;
     
     
-public:
+    DEPTH_POINT* depth_points;
      std::mutex depth_read_lock;
+    float depth_scale = 50.0f;
+    bool got_new_depth_data = false;
 
-    
-    
     
 };
 
