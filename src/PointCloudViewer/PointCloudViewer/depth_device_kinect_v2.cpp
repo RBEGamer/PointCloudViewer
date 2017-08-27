@@ -200,7 +200,7 @@ sf::Vector3f depth_device_kinect_v2::get_depth_point(const  int _x, const int _y
 
 
 //SIMPLY GOTO THOUGH EACH POINT AN UPDATE POSTION
-bool depth_device_kinect_v2::refresh_existing_primitives_position(std::vector<primitive*> _primitives){
+bool depth_device_kinect_v2::refresh_existing_primitives_position(const std::vector<primitive*>* _primitives){
     if(dev == 0){
         std::cout << __FUNCTION__ << " - ERROR - please open device first" << std::endl;
 
@@ -223,15 +223,15 @@ bool depth_device_kinect_v2::refresh_existing_primitives_position(std::vector<pr
     size_t prim_index_counter = 0;
     for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
         for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
-            if(_primitives.at(prim_index_counter) == nullptr){
+            if(_primitives->at(prim_index_counter) == nullptr){
                 prim_index_counter++;
                 continue;
             }
             //Simply copy over
-            if(prim_index_counter >= _primitives.size()){
+            if(prim_index_counter >= _primitives->size()){
                 break;
             }
-            _primitives.at(prim_index_counter)->position =  sf::Vector3f((depth_points+h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->x*depth_scale,
+            _primitives->at(prim_index_counter)->position =  sf::Vector3f((depth_points+h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->x*depth_scale,
                                                                          (depth_points+h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->y*depth_scale,
                                                                          (depth_points+h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w)->z*depth_scale);
             prim_index_counter++;
