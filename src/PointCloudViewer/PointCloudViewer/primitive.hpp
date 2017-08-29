@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-
+#include "shader.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -39,6 +39,8 @@ public:
     sf::Vector3f roation;
     sf::Vector3f scale;
     primitive* parent = NULL;
+    
+    shader draw_shader;
 };
 
 

@@ -15,6 +15,7 @@
 		1F9D9D941F44EAF8009DD8AC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D9D931F44EAF8009DD8AC /* main.cpp */; };
 		1F9D9DA11F44ED96009DD8AC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F9D9DA01F44ED96009DD8AC /* OpenGL.framework */; };
 		1F9D9DA31F44ED9D009DD8AC /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F9D9DA21F44ED9D009DD8AC /* GLUT.framework */; };
+		1FBF70611F556F3C0042E789 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FBF705F1F556F3C0042E789 /* shader.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		1F9D9D931F44EAF8009DD8AC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1F9D9DA01F44ED96009DD8AC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		1F9D9DA21F44ED9D009DD8AC /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		1FBF705F1F556F3C0042E789 /* shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shader.cpp; sourceTree = "<group>"; };
+		1FBF70601F556F3C0042E789 /* shader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = shader.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +82,8 @@
 				1F1841C81F4585B400BC11E9 /* depth_device.hpp */,
 				1F1841CA1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp */,
 				1F1841CB1F4594AC00BC11E9 /* depth_device_kinect_v2.hpp */,
+				1FBF705F1F556F3C0042E789 /* shader.cpp */,
+				1FBF70601F556F3C0042E789 /* shader.hpp */,
 			);
 			path = PointCloudViewer;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FBF70611F556F3C0042E789 /* shader.cpp in Sources */,
 				1F9D9D941F44EAF8009DD8AC /* main.cpp in Sources */,
 				1F1841CC1F4594AC00BC11E9 /* depth_device_kinect_v2.cpp in Sources */,
 				1F1841C91F4585B400BC11E9 /* depth_device.cpp in Sources */,

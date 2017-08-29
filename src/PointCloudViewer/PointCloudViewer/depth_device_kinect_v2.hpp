@@ -96,7 +96,7 @@ public:
     
     sf::Vector3f get_depth_point(const  int _x, const int _y);
     bool refresh_existing_primitives_position(const std::vector<primitive*>* _primitives);
-    bool add_new_primitives_to_vector(std::vector<primitive*> _primitives);
+    bool append_new_primitives_to_vector(std::vector<primitive*> _primitives);
     //scan
     void update(); //todo remove
     

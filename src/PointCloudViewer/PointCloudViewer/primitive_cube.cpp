@@ -35,7 +35,7 @@ void primitive_cube::init(){
 
 void primitive_cube::draw(){
         glPushMatrix();
-    
+    draw_shader.use_shader();
     glTranslatef(position.x, position.y, position.z);
     
     //Change the color of the cube to OpenGL RGB (goes from [0,1])

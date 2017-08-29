@@ -22,6 +22,7 @@
 #include "primitive.hpp"
 #include "primitive_cube.hpp"
 
+#include "shader.hpp"
 
 #include "depth_device_kinect_v2.hpp"
 
@@ -146,7 +147,12 @@ int main(int argc, char const** argv)
      
      */
  
-  
+    
+    
+    //FIRST LOAD AND COMPILE ALL SHADERS
+    shader shaderloader;
+    shaderloader.load_shaders_from_dir("./shaders");
+    
     
     std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,512*424);
 
@@ -162,16 +168,9 @@ int main(int argc, char const** argv)
             float cubeSize = 5.0f;
             sf::Color colour = sf::Color(rand() % 205 + 50, rand() % 205 + 50, rand() % 205 + 50);
            
-      
-    
             cubes.at(i+j)->position =posVec;
-            
             cubes.at(i+j)->scale = sf::Vector3f(cubeSize,cubeSize,cubeSize);
-            
             cubes.at(i+j)->color= sf::Vector3f(colour.r/255.0f,colour.g/255.0f,colour.b/255.0f);
-         
-            
-            
         }
     }
     

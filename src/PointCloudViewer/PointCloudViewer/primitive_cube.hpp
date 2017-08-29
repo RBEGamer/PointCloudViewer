@@ -13,6 +13,7 @@
 
 #include "primitive.hpp"
 
+#include "shader.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -34,7 +35,8 @@ public:
     
     sf::Vector3f color;
     
-
+private:
+    shader draw_shader;
 
     
 };
