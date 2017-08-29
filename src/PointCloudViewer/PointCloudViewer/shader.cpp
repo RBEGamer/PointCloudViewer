@@ -48,7 +48,16 @@ bool shader::load_shaders_from_dir(const std::string _dir){
 #if __cplusplus > 201402L
         for (auto & read_dir : std::filesystem::directory_iterator(dir))
             std::cout << "found dir : " << read_dir << std::endl;
-            _folders.push_back(read_dir);
+    bool ignore_name_is_in = false;
+    for(int k = 0; k < folder_name_ignore_list_len; k++){
+        if(ep->d_name ==folder_name_ignore_list[k]){
+            ignore_name_is_in = true;
+            std::cout << "ignored folder" << std::endl;
+        }
+    }
+    if(!ignore_name_is_in){
+        _folders.push_back(read_dir);
+    }
         }
         if(_folders.size() <= 0){
              std::cout << "could not open directory" << std::endl;
@@ -62,8 +71,19 @@ if (dp != NULL)
 {
     while ((ep = readdir (dp))){
         std::cout <<  "found dir : " << ep->d_name << std::endl;
-        _folders.push_back(ep->d_name);
-    }
+        bool ignore_name_is_in = false;
+        for(int k = 0; k < folder_name_ignore_list_len; k++){
+            if(ep->d_name ==folder_name_ignore_list[k]){
+                ignore_name_is_in = true;
+                std::cout << "ignored folder" << std::endl;
+            }
+        }
+        if(!ignore_name_is_in){
+            _folders.push_back(ep->d_name);
+        }
+
+
+           }
     (void) closedir (dp);
 }else{
     std::cout << "could not open directory" << std::endl;
@@ -98,10 +118,23 @@ if (dp != NULL)
         }
 //#endif
         
-        
+        //skip empty folders
+        if(files_in_folder.size() <= 0){
+            continue;
+        }
+        //NOW GOTOT EACH AND LOAD THEM
         volatile bool files_read_complete = true;
-        for(int j = 0; i < files_in_folder.size();j++){
-            
+        for(int j = 0;j < files_in_folder.size();j++){
+            //check for invalid system folder paths
+            bool ignore_name_is_in = false;
+            for(int k = 0; k < folder_name_ignore_list_len; k++){
+                if(files_in_folder.at(i) ==folder_name_ignore_list[k]){
+                    ignore_name_is_in = true;
+                }
+            }
+            if(ignore_name_is_in){
+                continue;
+            }
             //check extention and sort into an array
             std::string tmp = "";
             tmp.append((const char*)files_in_folder.at(j).find_last_of('.'));
@@ -128,7 +161,7 @@ if (dp != NULL)
             std::cout << "one or more files cant be read please check" << std::endl;
             continue;
         }
-            //determent type
+            //GET THE FINAL SHADER TYPE BY
             if(shader_strings[0] == "" && shader_strings[1] != "" && shader_strings[2] != "" && shader_strings[3] == ""){
                 tmp_info.type = shader::SHADER_TYPE::OGL_VERTEX_FRAGMENT;
             }else  if(shader_strings[0] != "" && shader_strings[1] != "" && shader_strings[2] != "" && shader_strings[3] == ""){
@@ -162,7 +195,7 @@ if (dp != NULL)
             
             
             //NOW PARSE LAYOUT PARAMETERS
-            
+            //PARSE ANY UNIFORM VARIABLES
             
             
           

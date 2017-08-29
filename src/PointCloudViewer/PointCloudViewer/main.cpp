@@ -151,7 +151,7 @@ int main(int argc, char const** argv)
     
     //FIRST LOAD AND COMPILE ALL SHADERS
     shader shaderloader;
-    shaderloader.load_shaders_from_dir("./shaders");
+    shaderloader.load_shaders_from_dir("./shader");
     
     
     std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,512*424);

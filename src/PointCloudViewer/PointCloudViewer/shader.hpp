@@ -111,8 +111,6 @@ public:
      ->    bla_frag
      */
     bool load_shaders_from_dir(const std::string _dir);
-    
-    
     //returns a shader info for to use
     SHADER_INFO get_shader(const std::string _name);
     
@@ -121,19 +119,15 @@ public:
     typedef std::map<std::string, SHADER_INFO> SH_MAP; //list with all loaded shaders
 
   private:
-
-
+    
+    #define  folder_name_ignore_list_len  3
+    const std::string folder_name_ignore_list[folder_name_ignore_list_len] = {".", "..", ".DS_Store"};
+    
+    
+    
+    
+    
     static SH_MAP loaded_shaders;
-    
-    static SH_MAP init_map() {
-        SH_MAP map;
-        map["invalid"] = SHADER_INFO();
-        return map;
-    }
-    
-
-    
-    
     static bool shader_loaded;
     bool shader_set = false;
     std::string shader_set_name = "";
@@ -143,8 +137,12 @@ public:
     bool compile_shader_ogl_vert_fragment(SHADER_INFO* _info, std::string& _vertex_string, std::string& _fragment_string);
     //loads the content of a file to a string
     bool load_file_content(const char* _file, std::string& _string);
-
-
+    //small init func for correct static map init
+    static SH_MAP init_map() {
+        SH_MAP map;
+        map["invalid"] = SHADER_INFO();
+        return map;
+    }
     
 
 };
