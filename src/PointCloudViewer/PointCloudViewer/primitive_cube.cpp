@@ -9,9 +9,12 @@
 #include "primitive_cube.hpp"
 
 void primitive_cube::print_info(){
-    std::cout << "cube " << " pos=" << position.x << "," << position.y << "," << position.z << "" << std::endl;
+    std::cout << "cube " << " pos=" << position.x << "," << position.y << "," << position.z << ""  <<std::endl;
 }
 
+void primitive_cube::set_shader(const char* _name){
+    draw_shader = shader(_name);
+}
 
 primitive_cube::primitive_cube(){
     position = sf::Vector3f(0.0f,0.0,0.0f);

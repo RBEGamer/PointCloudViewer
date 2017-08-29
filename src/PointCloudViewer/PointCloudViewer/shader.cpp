@@ -10,6 +10,8 @@
 
 shader::shader(){
     loaded_shaders.clear();
+    shader::shader_loaded = false;
+     shader_set = false;
 }
 
 
@@ -51,7 +53,6 @@ bool shader::load_shaders_from_dir(const std::string _dir){
 #else
 DIR *dp;
 struct dirent *ep;
-
 dp = opendir (_dir.c_str());
 if (dp != NULL)
 {
@@ -77,9 +78,9 @@ if (dp != NULL)
                                                 //1 = vertex string
                                                 //2 = fragemnt string
                                                 //3 = compute string
-#if __cplusplus > 201402L
+//#if __cplusplus > 201402L
         //TODO IMPLEMENT C++2017 way
-#else
+//#else
         DIR *pDIR;
         struct dirent *entry;
         if( (pDIR=opendir(fin_path.c_str())) ){
@@ -91,7 +92,7 @@ if (dp != NULL)
             }
             closedir(pDIR);
         }
-#endif
+//#endif
         
         
         
@@ -152,20 +153,15 @@ if (dp != NULL)
             
             
         }//ende for files
-        //parse layout
+    
         
         
         
         //SAFE FINAL LOADED SHADER IN MAP
        shader::loaded_shaders[_folders.at(i)] = tmp_info;
     }//end for dir
-            shader::shader_loaded = true;
-            return true;
-    //get types
-    //parse layouts
-    //load shaders
-    //safe glint as foldername in map
-         
+    shader::shader_loaded = true;
+    return true;
 }
 
             

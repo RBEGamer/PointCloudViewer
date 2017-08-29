@@ -34,7 +34,7 @@ public:
     void print_info();
     
     sf::Vector3f color;
-    
+    void set_shader(const char* _name);
 private:
     shader draw_shader;
 

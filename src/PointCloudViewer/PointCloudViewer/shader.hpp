@@ -15,7 +15,7 @@
 #include <string>
 #include <iostream>
 
-
+#include <fstream>
 
 
 
@@ -114,6 +114,6 @@ public:
     bool shader_set = false;
     std::string shader_set_name = "";
     
-    static bool shader_loaded = false;
+    static bool shader_loaded;
 };
 #endif /* shader_hpp */
