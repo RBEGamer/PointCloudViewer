@@ -137,18 +137,25 @@ if (dp != NULL)
             }
             //check extention and sort into an array
             std::string tmp = "";
-            tmp.append((const char*)files_in_folder.at(j).find_last_of('.'));
+            int last_dot_index = files_in_folder.at(j).find_last_of('.');
+            if(last_dot_index < 0){
+                std::cout << "this file has no extention" << std::endl;
+                continue;
+            }
+            
+            tmp = files_in_folder.at(j).substr(last_dot_index);
+            std::string fin_file_path =(fin_path +"/"+files_in_folder.at(j));
             bool read_res = false;
             if(tmp == OGL_SHADER_FILE_EXTENTION_GEOMETRY){
-                read_res = load_file_content(files_in_folder.at(j).c_str(),shader_strings[0]);
+                read_res = load_file_content(fin_file_path.c_str(),shader_strings[0]);
             }else  if(tmp == OGL_SHADER_FILE_EXTENTION_VERTEX){
-                read_res = load_file_content(files_in_folder.at(j).c_str(),shader_strings[1]);
+                read_res = load_file_content(fin_file_path.c_str(),shader_strings[1]);
             }else  if(tmp == OGL_SHADER_FILE_EXTENTION_FRAGMENT){
-                 read_res = load_file_content(files_in_folder.at(j).c_str(),shader_strings[2]);
+                 read_res = load_file_content(fin_file_path.c_str(),shader_strings[2]);
             }else  if(tmp == OGL_SHADER_FILE_EXTENTION_COMPUTE){
-                read_res = load_file_content(files_in_folder.at(j).c_str(),shader_strings[3]);
+                read_res = load_file_content(fin_file_path.c_str(),shader_strings[3]);
             }else{
-            std::cout << "this file ext:" << tmp << "is not compatible with a gsls shader, please see file ext name in shader.h file" << std::endl;
+            std::cout << "this file ext:" << files_in_folder.at(j) << "is not compatible with a gsls shader, please see file ext name in shader.h file" << std::endl;
             }
             if(!read_res){
                 std::cout << "cant read this file it it open ? " << std::endl;
@@ -196,7 +203,8 @@ if (dp != NULL)
             
             //NOW PARSE LAYOUT PARAMETERS
             //PARSE ANY UNIFORM VARIABLES
-            
+            //TODO
+            //TODO
             
           
         
@@ -212,7 +220,7 @@ if (dp != NULL)
             
             
 bool shader::compile_shader_ogl_vert_fragment(shader::SHADER_INFO* _info, std::string& _vertex_string, std::string& _fragment_string){
-    if(_info != nullptr){
+    if(_info == nullptr){
         std::cout << __FUNCTION__ << " : info is null" << std::endl;
         return false;
     }
@@ -296,7 +304,11 @@ _string = "";
             _string += "\n" + Line;
         }
         FileLoadStream.close();
+         return true;
+    }else{
+        return false;
     }
+    return true;
 }
        
             

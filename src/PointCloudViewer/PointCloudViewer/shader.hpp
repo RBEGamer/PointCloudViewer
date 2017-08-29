@@ -36,11 +36,11 @@
 #include <map>
 #include <vector>
 
-
-#define OGL_SHADER_FILE_EXTENTION_GEOMETRY "geom"
-#define OGL_SHADER_FILE_EXTENTION_VERTEX "vert"
-#define OGL_SHADER_FILE_EXTENTION_FRAGMENT "frag"
-#define OGL_SHADER_FILE_EXTENTION_COMPUTE "comp"
+//ONLY THE LAST . COUNTS .abc.def -> .def
+#define OGL_SHADER_FILE_EXTENTION_GEOMETRY ".geom"
+#define OGL_SHADER_FILE_EXTENTION_VERTEX ".vert"
+#define OGL_SHADER_FILE_EXTENTION_FRAGMENT ".frag"
+#define OGL_SHADER_FILE_EXTENTION_COMPUTE ".comp"
 
 class shader{
 
