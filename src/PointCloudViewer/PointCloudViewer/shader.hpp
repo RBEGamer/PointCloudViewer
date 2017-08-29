@@ -59,13 +59,32 @@ public:
         OGL_LAYOUT_TYPE_VEC4,
         OGL_LAYOUT_TYPE_TEXT2D,
         OGL_LAYOUT_TYPE_MAT4,
-        OGL_LAYOUT_TYPE_MAT3
+        OGL_LAYOUT_TYPE_MAT3,
+        OGL_LAYOuT_TYPE_INVALID
+    };
+    
+    struct SHADER_LAYOUT_ITEM{
+        SHADER_LAYOUT_TYPE type;
+        std::string uniform_name;
+        
+        SHADER_LAYOUT_ITEM()
+        {
+            type = SHADER_LAYOUT_TYPE::OGL_LAYOuT_TYPE_INVALID;
+            uniform_name = "invalid";
+        }
     };
     
     struct SHADER_INFO{
         SHADER_TYPE type;
         GLint program_id;
-        std::vector<SHADER_LAYOUT_TYPE> layout;
+        std::vector<SHADER_LAYOUT_ITEM> layout;
+        
+        SHADER_INFO()
+        {
+            type = SHADER_TYPE::OGL_INVALID;
+            program_id = 0;
+            layout.clear();
+        }
     };
 
     
@@ -99,12 +118,22 @@ public:
     
     
     
+    typedef std::map<std::string, SHADER_INFO> SH_MAP; //list with all loaded shaders
 
-    
-    
   private:
 
-    static std::map<std::string, SHADER_INFO> loaded_shaders; //list with all loaded shaders
+
+    static SH_MAP loaded_shaders;
+    
+    static SH_MAP init_map() {
+        SH_MAP map;
+        map["invalid"] = SHADER_INFO();
+        return map;
+    }
+    
+
+    
+    
     static bool shader_loaded;
     bool shader_set = false;
     std::string shader_set_name = "";

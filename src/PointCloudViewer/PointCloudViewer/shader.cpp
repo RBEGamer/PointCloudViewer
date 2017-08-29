@@ -11,8 +11,8 @@
 
 
 bool shader::shader_loaded = false;
+shader::SH_MAP shader::loaded_shaders = init_map();
 
-std::map<std::string, shader::SHADER_INFO> loaded_shaders;
 
 shader::shader(){
      shader_set = false;
@@ -170,7 +170,7 @@ if (dp != NULL)
         
         
         //SAFE FINAL LOADED SHADER IN MAP
-       shader::loaded_shaders[_folders.at(i)] = tmp_info;
+      shader::loaded_shaders[_folders.at(i)] = tmp_info;
     }//end for dir
     shader::shader_loaded = true;
     return true;
@@ -276,6 +276,8 @@ shader::SHADER_INFO shader::get_shader(const std::string _name){
       throw "shader not exists";
     }
     return shader::loaded_shaders[_name];
+    SHADER_INFO t;
+    return t;
 }
 
             

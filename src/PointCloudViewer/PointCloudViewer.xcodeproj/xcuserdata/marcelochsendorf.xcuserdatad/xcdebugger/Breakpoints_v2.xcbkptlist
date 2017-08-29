@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PointCloudViewer/main.cpp"
-            timestampString = "525493158.183925"
+            timestampString = "525735950.071214"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
             landmarkName = "main(int argc, char const** argv)"
             landmarkType = "9">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PointCloudViewer/main.cpp"
-            timestampString = "525493158.183925"
+            timestampString = "525735950.071214"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "main(int argc, char const** argv)"
             landmarkType = "9">
          </BreakpointContent>
@@ -86,17 +86,78 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PointCloudViewer/shader.hpp"
-            timestampString = "525695318.309307"
+            timestampString = "525738382.202721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "class shader"
             landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "shader::shader()"
+                  moduleName = "PointCloudViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/shader.hpp"
+                  timestampString = "525735951.464263"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "114"
+                  endingLineNumber = "114"
+                  offsetFromSymbolStart = "13">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "shader::shader()"
+                  moduleName = "PointCloudViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/shader.hpp"
+                  timestampString = "525735951.473994"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "114"
+                  endingLineNumber = "114"
+                  offsetFromSymbolStart = "13">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "shader::shader(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;)"
+                  moduleName = "PointCloudViewer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/marcelochsendorf/Desktop/PointCloudViewer/src/PointCloudViewer/PointCloudViewer/shader.hpp"
+                  timestampString = "525735951.476004"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "114"
+                  endingLineNumber = "114"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PointCloudViewer/shader.cpp"
+            timestampString = "525737726.978469"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
