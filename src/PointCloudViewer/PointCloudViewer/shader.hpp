@@ -70,7 +70,6 @@ public:
 
     
     
-    static std::map<std::string, SHADER_INFO> loaded_shaders;
     
     
     shader();
@@ -105,15 +104,19 @@ public:
     
   private:
 
+    static std::map<std::string, SHADER_INFO> loaded_shaders; //list with all loaded shaders
+    static bool shader_loaded;
+    bool shader_set = false;
+    std::string shader_set_name = "";
+    
     
     //compiles a vetex fagment shader with code an sets the gint int the shader info
     bool compile_shader_ogl_vert_fragment(SHADER_INFO* _info, std::string& _vertex_string, std::string& _fragment_string);
     //loads the content of a file to a string
     bool load_file_content(const char* _file, std::string& _string);
 
-    bool shader_set = false;
-    std::string shader_set_name = "";
+
     
-    static bool shader_loaded;
+
 };
 #endif /* shader_hpp */

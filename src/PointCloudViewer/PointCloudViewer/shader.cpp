@@ -8,9 +8,13 @@
 
 #include "shader.hpp"
 
+
+
+bool shader::shader_loaded = false;
+
+std::map<std::string, shader::SHADER_INFO> loaded_shaders;
+
 shader::shader(){
-    loaded_shaders.clear();
-    shader::shader_loaded = false;
      shader_set = false;
 }
 
@@ -95,7 +99,7 @@ if (dp != NULL)
 //#endif
         
         
-        
+        volatile bool files_read_complete = true;
         for(int j = 0; i < files_in_folder.size();j++){
             
             //check extention and sort into an array
@@ -115,8 +119,15 @@ if (dp != NULL)
             }
             if(!read_res){
                 std::cout << "cant read this file it it open ? " << std::endl;
+                files_read_complete = false;
+                break; //break because if this file is needed for the shader the compiltion will fail
             }
-            
+        }//ende for files
+        //check succ of reading all files
+        if(!files_read_complete){
+            std::cout << "one or more files cant be read please check" << std::endl;
+            continue;
+        }
             //determent type
             if(shader_strings[0] == "" && shader_strings[1] != "" && shader_strings[2] != "" && shader_strings[3] == ""){
                 tmp_info.type = shader::SHADER_TYPE::OGL_VERTEX_FRAGMENT;
@@ -138,12 +149,14 @@ if (dp != NULL)
                 throw "OGL_VERTEX_FRAGMENT_GEOMETRY not implemented";
             }else  if(tmp_info.type == SHADER_TYPE::OGL_COMPUTE){
                 throw "OGL_COMPUTE not implemented";
+            }else{
+            throw "OGL_INVALID not implemented";
             }
             
             //CHECK COMPILE RESULT
             if(!comp_res){
                 std::cout << "compiling of the shader failed please check your code" << std::endl;
-                return false;
+                continue; //contiunue to compile the remaining shaders
             }
             
             
@@ -152,8 +165,7 @@ if (dp != NULL)
             
             
             
-        }//ende for files
-    
+          
         
         
         
