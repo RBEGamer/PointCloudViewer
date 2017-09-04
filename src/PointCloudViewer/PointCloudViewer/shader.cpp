@@ -23,6 +23,10 @@ shader::~shader(){
 
 }
 
+void shader::set_shader_name(const std::string _name){
+    shader_set_name =_name;
+    shader_set = true;
+}
 
 shader::shader(const std::string& _program_to_use_name){
     //TOTO SET SHADER TO USE

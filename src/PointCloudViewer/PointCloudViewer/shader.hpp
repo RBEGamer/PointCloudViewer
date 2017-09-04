@@ -36,7 +36,7 @@
 #include <map>
 #include <vector>
 
-//ONLY THE LAST . COUNTS .abc.def -> .def
+//ONLY THE LAST . COUNTS AS EXTENTION .abc.def -> .def
 #define OGL_SHADER_FILE_EXTENTION_GEOMETRY ".geom"
 #define OGL_SHADER_FILE_EXTENTION_VERTEX ".vert"
 #define OGL_SHADER_FILE_EXTENTION_FRAGMENT ".frag"
@@ -77,7 +77,7 @@ public:
     struct SHADER_INFO{
         SHADER_TYPE type;
         GLint program_id;
-        std::vector<SHADER_LAYOUT_ITEM> layout;
+        std::vector<SHADER_LAYOUT_ITEM> layout;//TODO MAP
         
         SHADER_INFO()
         {
@@ -88,7 +88,10 @@ public:
     };
 
     
-    
+    struct FILE_CHANGE_INFO{
+        std::string filename;
+        std::string folder_path;
+    };
     
     
     shader();
@@ -114,6 +117,7 @@ public:
     //returns a shader info for to use
     SHADER_INFO get_shader(const std::string _name);
     
+    void set_shader_name(const std::string _name);
     
     
     typedef std::map<std::string, SHADER_INFO> SH_MAP; //list with all loaded shaders

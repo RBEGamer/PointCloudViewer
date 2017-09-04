@@ -171,6 +171,8 @@ int main(int argc, char const** argv)
             cubes.at(i+j)->position =posVec;
             cubes.at(i+j)->scale = sf::Vector3f(cubeSize,cubeSize,cubeSize);
             cubes.at(i+j)->color= sf::Vector3f(colour.r/255.0f,colour.g/255.0f,colour.b/255.0f);
+            
+            cubes.at(i+j)->set_shader("static_color");
         }
     }
     
