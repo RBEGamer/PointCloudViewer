@@ -13,3 +13,6 @@ The repo includes my first steps with pointclouds. Since i have recieved my Nvid
 
 
 # PICTURES
+
+### FIRST DRAWABLE POINTS
+![Gopher image](/documentation/images/first_points_rendered.png)
