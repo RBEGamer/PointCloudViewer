@@ -46,6 +46,12 @@ void shader::use_shader(){
 }
 
 
+void shader::unuse_shader(){
+      glUseProgram(0);
+}
+
+
+
 bool shader::load_shaders_from_dir(const std::string _dir){
 
         std::vector<std::string> _folders;

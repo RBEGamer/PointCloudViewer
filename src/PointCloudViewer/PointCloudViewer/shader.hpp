@@ -99,7 +99,7 @@ public:
     ~shader();
     
     void use_shader();
-    
+    void unuse_shader();
     /*
      load all shader in folders
      
