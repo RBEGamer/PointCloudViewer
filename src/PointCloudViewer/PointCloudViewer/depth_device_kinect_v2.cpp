@@ -338,7 +338,7 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
 
 
 #ifdef __CUDACC__
-__global__ void cuda_calc_depth_3d_point(float* _raw_depth, DEPTH_POINT* _point_array)
+__global__ void cuda_calc_depth_3d_point(float* _raw_depth, DEPTH_POINT* _point_array) //TODO ADD XY ARRAY FOR INDEXx
 {
    int i = blockIdx.x * blockDim.x + threadIdx.x;
     
