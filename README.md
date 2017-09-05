@@ -16,3 +16,12 @@ The repo includes my first steps with pointclouds. Since i have recieved my Nvid
 
 ### FIRST DRAWABLE POINTS
 ![Gopher image](/documentation/images/first_points_rendered.png)
+
+
+
+
+# FILES
+
+* depth_device_kinect_2.cpp/hpp -> libfreenect depth wrapper
+* shader.cpp/hpp -> opengl automated shader compiler
+* primitive_cube.cpp/hpp -> simple cube object
