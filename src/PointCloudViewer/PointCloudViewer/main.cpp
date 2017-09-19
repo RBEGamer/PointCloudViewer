@@ -30,7 +30,7 @@
 
 
 
-
+#include <fstream>
 
 
 
@@ -63,7 +63,7 @@ std::vector<primitive*> objs;
 std::vector<primitive_cube*> cubes;
 
 
-depth_device_kinect_v2 kinect_device;
+
 
 
 
@@ -90,8 +90,8 @@ int cleanup(){ //TODO DELETE MISSING
         objs.at(i) = NULL;
         }
     }
-    kinect_device.stop_capture();
-    kinect_device.disconnect();
+   // kinect_device->stop_capture();
+   // kinect_device->disconnect();
     objs.clear();
     return 0;
 }
@@ -138,7 +138,7 @@ int main(int argc, char const** argv)
     
     /*TODO
      create own define file for types
-     create scenemanager for holding objects
+
      include ini loader
      add input handler for key events
      add shader support
@@ -146,6 +146,10 @@ int main(int argc, char const** argv)
      
      
      */
+    
+    
+    
+    
  
     
     
@@ -154,9 +158,8 @@ int main(int argc, char const** argv)
     shaderloader.load_shaders_from_dir("./shader");
     
     
+    //create some test objects
     std::vector<primitive*> test =  allocate_cubes(&objs,&cubes,512*424);
-
-
     float radius = 100;
     int angle = 30;
     for (int i = 0; i < 360; i+=10)
@@ -168,7 +171,7 @@ int main(int argc, char const** argv)
             float cubeSize = 5.0f;
             sf::Color colour = sf::Color(rand() % 205 + 50, rand() % 205 + 50, rand() % 205 + 50);
            
-            cubes.at(i+j)->position =posVec;
+            cubes.at(i+j)->position = posVec;
             cubes.at(i+j)->scale = sf::Vector3f(cubeSize,cubeSize,cubeSize);
             cubes.at(i+j)->color= sf::Vector3f(colour.r/255.0f,colour.g/255.0f,colour.b/255.0f);
             cubes.at(i+j)->set_shader("static_color");
@@ -179,20 +182,8 @@ int main(int argc, char const** argv)
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
+    //init kinect device
+    depth_device_kinect_v2 kinect_device;
     if(kinect_device.connect(kinect_device.get_default_device_serial(), depth_device_kinect_v2::CON_MODE::CON_MODE_CPU)){
         std::cout << "kinect connected" << std::endl;
         kinect_device.start_capture();
@@ -202,9 +193,12 @@ int main(int argc, char const** argv)
 
     
   
+ //   TODO
+ //   ->camera movement als klasse zum switchen mit pos und lookup vector
+ //   ->shader erstellen
+ //   ->
     
-    
-    
+    int frame_counter = 0;
     while (window.isOpen())
     {
         //calc deltatime
@@ -229,9 +223,17 @@ int main(int argc, char const** argv)
         
         
       
-//      kinect_device.refresh_existing_primitives_position(test);
+      kinect_device.refresh_existing_primitives_position(&test);
 
-       
+        
+        
+        frame_counter++;
+        
+        std::cout << "frame_written";
+        if(frame_counter >= 10){
+            break;
+        }
+        
         
         //draw objs
         for (size_t i = 0; i < objs.size(); i++) {

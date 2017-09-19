@@ -261,20 +261,23 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
         return;
     }
 
-    libfreenect2::SyncMultiFrameListener listener(libfreenect2::Frame::Color |libfreenect2::Frame::Depth );
+    libfreenect2::SyncMultiFrameListener listener(/*libfreenect2::Frame::Color |*/libfreenect2::Frame::Depth );
     libfreenect2::FrameMap frames;
    
     caller->dev->setColorFrameListener(&listener);
     caller->dev->setIrAndDepthFrameListener(&listener);
     
+    std::ofstream myfile;
+    myfile.open ("./frames.txt");
 
+    int fid = 0;
+    
     
     //DEPTH POINT VARS FOR CPU CALC
     float raw_depth_value = 0.0f;
     float px = 0.0f,py = 0.0f, pz = 0.0f;
     
     
- 
     
         while (caller->is_thread_running) {
         
@@ -309,7 +312,7 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
 //#ifdef __CUDACC__
 //             cuda_calc_depth_3d_point<<<1, 1>>>(frame_data, caller->depth_points);
 //#else
-            
+             myfile << "frame_" << fid++ << "_";
         for (size_t w = 0; w < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X; w++) {
             for (size_t h = 0; h < KINECT_V2_CAMERA_PARAMS_RES_DEPTH_Y; h++) {
                 raw_depth_value = frame_data[h*KINECT_V2_CAMERA_PARAMS_RES_DEPTH_X+w];
@@ -317,12 +320,29 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
                 px = (w - KINECT_V2_CAMERA_PARAMS_CX) * pz / KINECT_V2_CAMERA_PARAMS_FX;
                 py = (h - KINECT_V2_CAMERA_PARAMS_CY) * pz / KINECT_V2_CAMERA_PARAMS_FY;
                 //ASSIGN
-                (caller->depth_points+h*depth->width+w)->x= px;// = sf::Vector3f(px,py,pz);
-                (caller->depth_points+h*depth->width+w)->y= py;
-                (caller->depth_points+h*depth->width+w)->z= pz;
-                (caller->depth_points+h*depth->width+w)->length = sqrtf((powf(px, 2.0f)+powf(py, 2.0f)+powf(pz, 2.0f)));
+                
+               // (caller->depth_points+h*depth->width+w)->x= px;// = sf::Vector3f(px,py,pz);
+               // (caller->depth_points+h*depth->width+w)->y= py;
+               // (caller->depth_points+h*depth->width+w)->z= pz;
+                
+                //(caller->depth_points+h*depth->width+w)->x= (float)raw_depth_value;// = sf::Vector3f(px,py,pz);
+                //(caller->depth_points+h*depth->width+w)->y= (float)raw_depth_value;
+                //(caller->depth_points+h*depth->width+w)->z= (float)raw_depth_value;
+
+                myfile << (float)raw_depth_value << ",";
+                
+               // (caller->depth_points+h*depth->width+w)->length = sqrtf((powf(px, 2.0f)+powf(py, 2.0f)+powf(pz, 2.0f)));
                 } //END h
             } //END W
+            
+            
+       
+            myfile << "endof\n";
+            
+            break;
+
+            
+            
 //#endif
             caller->got_new_depth_data = true;
             caller->depth_read_lock.unlock();
@@ -332,6 +352,7 @@ void* depth_device_kinect_v2::processing_frames(void* _this){
         //RELEASE FRAME
         listener.release(frames);
     }
+     myfile.close();
     std::cout << "thread end" <<std::endl;
 }
 
